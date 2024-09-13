@@ -23,22 +23,12 @@ namespace ADO.net_databse_CRUD_Console_Application
             var userWith_1 = new byId();
 
             userWith_1.SelectById();
-            
 
+            var inserStudent = new AddStudent();
+            inserStudent.insertData(5, "koko", 33);
 
-            //try
-            //{
+            pro.read();
 
-            //    using (SqlConnection con = new SqlConnection(conStr))
-            //    {
-            //        con.Open();
-            //        Console.WriteLine("connection sucessfuly");
-            //    }
-            //}
-            //catch(Exception ex)
-            //{
-            //    Console.WriteLine($"there is an error : {ex.Message}");
-            //}
 
         }
         public void read()
@@ -89,5 +79,28 @@ namespace ADO.net_databse_CRUD_Console_Application
                 }
             }
         }
+        public class AddStudent
+        {
+            public void insertData(int id,string name, int age)
+            {
+                using(SqlConnection conInsert = new SqlConnection(conStr))
+                {
+                    conInsert.Open();
+
+                    string insertQuery = "insert into Students (stud_name, stud_age) values (@stud_name,@stud_age)";
+
+                    SqlCommand cmd = new SqlCommand(insertQuery, conInsert);
+                    cmd.Parameters.AddWithValue("@stud_name", name);
+                    cmd.Parameters.AddWithValue("@stud_age", age);
+
+                    int result = cmd.ExecuteNonQuery();
+
+                    Console.WriteLine(result > 0 ? "data inserted succesfuly:" : "data is not inserted");
+
+
+                }
+            }
+        }
+
     }
 }
