@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace ADO.net_databse_CRUD_Console_Application
@@ -18,16 +19,29 @@ namespace ADO.net_databse_CRUD_Console_Application
         {
 
             Program pro = new Program();
-            pro.read();
+            //pro.read();
 
             var userWith_1 = new byId();
 
-            userWith_1.SelectById();
+            userWith_1.SelectById(1);
 
             var inserStudent = new AddStudent();
-            inserStudent.insertData(5, "koko", 33);
+            //inserStudent.insertData(5, "koko", 33);
+
+            //pro.read();
+
+            var updateVal = new updateStu();
+            //updateVal.update(1, "anandhu sb");
+
+            //pro.read();
+
+            var delStu = new DeleteStud();
+            delStu.deleteStuById(5);
+            
 
             pro.read();
+
+
 
 
         }
@@ -57,15 +71,17 @@ namespace ADO.net_databse_CRUD_Console_Application
 
         public class byId
         { 
-            public void SelectById()
+            public void SelectById(int Id)
             {
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
                     
-                    string selectByIdQuery = "select stud_name from Students where stud_id = 1";
+                    string selectByIdQuery = "select stud_name from Students where stud_id = @id";
 
                     SqlCommand conId = new SqlCommand(selectByIdQuery, con);
+
+                    conId.Parameters.AddWithValue("@id", Id);
 
                     SqlDataReader reder = conId.ExecuteReader();
 
@@ -100,6 +116,52 @@ namespace ADO.net_databse_CRUD_Console_Application
 
                 }
             }
+        }
+
+        public class updateStu
+        {
+            public void update(int id, string name)
+            {
+                using(SqlConnection conUp = new SqlConnection(conStr))
+                {
+                    conUp.Open();
+
+                    string updateQuery = "update Students set stud_name = @Name where stud_id = @id";
+
+                    SqlCommand cmd = new SqlCommand(updateQuery, conUp);
+
+                    cmd.Parameters.AddWithValue("@Name", name);
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    int result = cmd.ExecuteNonQuery();
+
+                    Console.WriteLine(result > 0 ? "update done successfuly..." : "some error with the updates");
+
+                }
+            }
+        }
+
+        public class DeleteStud
+        {
+            public void deleteStuById(int Id)
+            {
+                using (SqlConnection ConDel = new SqlConnection(conStr))
+                {
+                    ConDel.Open();
+
+                    string deleteQuery = "delete from Students where stud_id = @id";
+
+                    SqlCommand cmd = new SqlCommand(deleteQuery, ConDel);
+
+                    cmd.Parameters.AddWithValue("@id", Id);
+
+                    int result = cmd.ExecuteNonQuery();
+
+                    Console.WriteLine(result > 0 ? "delete student done success" : "there is a error" );
+
+                }
+            }
+
         }
 
     }
