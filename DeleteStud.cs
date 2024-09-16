@@ -14,18 +14,27 @@ namespace ADO.net_databse_CRUD_Console_Application
 
         public void Delete(int Id)
         {
-            using(SqlConnection con =  new SqlConnection(connectionString))
+            try
             {
-                con.Open();
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
 
-                string deleteQ = "delete Students where stud_id = @id";
+                    string deleteQ = "delete Students where stud_id = @id";
 
-                SqlCommand cmd = new SqlCommand(deleteQ, con);
-                cmd.Parameters.AddWithValue("@id", Id);
+                    SqlCommand cmd = new SqlCommand(deleteQ, con);
+                    cmd.Parameters.AddWithValue("@id", Id);
 
-                cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+
+                }
 
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"There is a error in the code {ex.Message}");
+            }
+           
         }
     }
 }
