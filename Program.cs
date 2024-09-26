@@ -20,21 +20,56 @@ namespace ADO.net_databse_CRUD_Console_Application
 
         {
 
-            var I = new insertStudents();
-            //I.InsertInto("abdulla", 21);
+            //var I = new insertStudents();
+            ////I.InsertInto("abdulla", 21);
 
-            var U = new UpdateStud();
-            //.Update(9, "abdulla yo", 23);
+            //var U = new UpdateStud();
+            ////.Update(9, "abdulla yo", 23);
 
-            var D = new DeleteStud();
-            D.Delete(14);
-            
+            //var D = new DeleteStud();
+            //D.Delete(14);
 
-            var R = new ReadAllStudent();
-            R.ReadStud();
 
-            
-            
+            //var R = new ReadAllStudent();
+            //R.ReadStud();
+
+            string connectingString = ConfigurationManager.ConnectionStrings["connectionStr"].ConnectionString;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectingString))
+                {
+                    con.Open();
+                    //Console.WriteLine("connection Done");
+
+                    SqlCommand cmd = new SqlCommand("select max (player_age) from SportsTeam", con);
+
+                    object result = cmd.ExecuteScalar();
+
+                    int maxAge = Convert.ToInt32(result);
+                    Console.WriteLine($"the max Values is : {maxAge}");
+
+                    SqlCommand cmd2 = new SqlCommand("select count(player_name) from SportsTeam where player_age = '21'", con);
+
+                    object countRes = cmd2.ExecuteScalar();
+
+                    int countAge = Convert.ToInt32(countRes);
+
+                    Console.WriteLine($"this the count of the players with same name :{countAge}");
+
+
+
+
+
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"There is a error in the connection : {ex.Message}");
+            }
+
+
 
 
 
